@@ -48,3 +48,39 @@ func Test_validateDigitsOnly(t *testing.T) {
 		})
 	}
 }
+
+func Test_validateCodeLength(t *testing.T) {
+	type args struct {
+		code           string
+		expectedLength int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "разная длина",
+			args: args{
+				code:           "абвгд",
+				expectedLength: 3,
+			},
+			wantErr: true,
+		},
+		{
+			name: "одинаковая длина",
+			args: args{
+				code:           "абвгд",
+				expectedLength: 5,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateCodeLength(tt.args.code, tt.args.expectedLength); (err != nil) != tt.wantErr {
+				t.Errorf("validateCodeLength() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
