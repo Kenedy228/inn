@@ -7,3 +7,12 @@ var (
 	TypePhysical     Type = "physical"
 	TypeOrganization Type = "organization"
 )
+
+func (t Type) isValid() bool {
+	switch t {
+	case TypeIP, TypePhysical, TypeOrganization:
+		return true
+	default:
+		return false
+	}
+}
