@@ -1,6 +1,9 @@
 package inn
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestType_isValid(t *testing.T) {
 	tests := []struct {
@@ -25,7 +28,7 @@ func TestType_isValid(t *testing.T) {
 		},
 		{
 			name: "валидный тип",
-			t:    TypeIP,
+			t:    TypeIndividualEntrepreneur,
 			want: true,
 		},
 	}
@@ -46,7 +49,7 @@ func TestType_codeLength(t *testing.T) {
 	}{
 		{
 			name: "валидное значение",
-			t:    TypeIP,
+			t:    TypeIndividualEntrepreneur,
 			want: 12,
 		},
 		{
@@ -59,6 +62,32 @@ func TestType_codeLength(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.t.codeLength(); got != tt.want {
 				t.Errorf("codeLength() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestType_checksumCoefficients(t *testing.T) {
+	tests := []struct {
+		name string
+		t    Type
+		want [][]int
+	}{
+		{
+			name: "для известного типа возвращает непустой массив",
+			t:    TypeLegalEntity,
+			want: [][]int{{2, 4, 10, 3, 5, 9, 4, 6, 8}},
+		},
+		{
+			name: "для неизвестного типа возвращает пустой массив",
+			t:    "",
+			want: [][]int{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.t.checksumCoefficients(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("checksumCoefficients() = %v, want %v", got, tt.want)
 			}
 		})
 	}

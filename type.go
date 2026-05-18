@@ -3,14 +3,14 @@ package inn
 type Type string
 
 var (
-	TypeIP           Type = "ip"
-	TypePhysical     Type = "physical"
-	TypeOrganization Type = "organization"
+	TypeIndividualEntrepreneur Type = "individual entrepreneur"
+	TypeNaturalPerson          Type = "natural person"
+	TypeLegalEntity            Type = "legal entity"
 )
 
 func (t Type) isValid() bool {
 	switch t {
-	case TypeIP, TypePhysical, TypeOrganization:
+	case TypeIndividualEntrepreneur, TypeNaturalPerson, TypeLegalEntity:
 		return true
 	default:
 		return false
@@ -19,9 +19,9 @@ func (t Type) isValid() bool {
 
 func (t Type) codeLength() int {
 	switch t {
-	case TypeIP, TypePhysical:
+	case TypeIndividualEntrepreneur, TypeNaturalPerson:
 		return 12
-	case TypeOrganization:
+	case TypeLegalEntity:
 		return 10
 	default:
 		return 0
@@ -30,12 +30,12 @@ func (t Type) codeLength() int {
 
 func (t Type) checksumCoefficients() [][]int {
 	switch t {
-	case TypeIP, TypePhysical:
+	case TypeIndividualEntrepreneur, TypeNaturalPerson:
 		return [][]int{
 			{7, 2, 4, 10, 3, 5, 9, 4, 6, 8},
 			{3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8},
 		}
-	case TypeOrganization:
+	case TypeLegalEntity:
 		return [][]int{
 			{2, 4, 10, 3, 5, 9, 4, 6, 8},
 		}
