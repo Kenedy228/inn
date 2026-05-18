@@ -1,6 +1,19 @@
 package inn
 
-import "fmt"
+import (
+	"fmt"
+	"unicode/utf8"
+)
+
+func validateCodeLength(code string, expectedLength int) error {
+	rc := utf8.RuneCountInString(code)
+
+	if rc != expectedLength {
+		return fmt.Errorf("")
+	}
+
+	return nil
+}
 
 func validateDigitsOnly(code string) error {
 	runes := []rune(code)
