@@ -31,3 +31,20 @@ func validatePersonINN(inn string) error {
 
 	return nil
 }
+
+func validateLegalEntityINN(inn string) error {
+	digits := parseDigits(inn)
+
+	partDigits := digits[:9]
+	expectedPartDigit := digits[9]
+
+	if err := validateChecksumDigit(
+		partDigits,
+		legalEntityChecksumWeights,
+		expectedPartDigit,
+	); err != nil {
+		return fmt.Errorf("")
+	}
+
+	return nil
+}
