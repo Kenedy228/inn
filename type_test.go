@@ -37,3 +37,29 @@ func TestType_isValid(t *testing.T) {
 		})
 	}
 }
+
+func TestType_codeLength(t *testing.T) {
+	tests := []struct {
+		name string
+		t    Type
+		want int
+	}{
+		{
+			name: "валидное значение",
+			t:    TypeIP,
+			want: 12,
+		},
+		{
+			name: "невалидное значение",
+			t:    "",
+			want: 0,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.t.codeLength(); got != tt.want {
+				t.Errorf("codeLength() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
