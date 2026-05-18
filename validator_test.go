@@ -41,3 +41,36 @@ func Test_validatePersonINN(t *testing.T) {
 		})
 	}
 }
+
+func Test_validateLegalEntityINN(t *testing.T) {
+	type args struct {
+		inn string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "валидный ИНН",
+			args: args{
+				inn: "1030000000",
+			},
+			wantErr: false,
+		},
+		{
+			name: "невалидный ИНН",
+			args: args{
+				inn: "7728168972", // Правильная 1, заменили на 2
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateLegalEntityINN(tt.args.inn); (err != nil) != tt.wantErr {
+				t.Errorf("validateLegalEntityINN() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
