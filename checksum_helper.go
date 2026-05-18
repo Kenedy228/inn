@@ -13,3 +13,13 @@ func calculateWeightedSum(digits, weights []int) int {
 
 	return sum
 }
+
+func calculateChecksumDigit(weightedSum int) int {
+	remainder := weightedSum % 11
+
+	if remainder > 9 {
+		remainder %= 10
+	}
+
+	return remainder
+}
