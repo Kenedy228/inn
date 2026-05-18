@@ -32,3 +32,14 @@ func validateDigitsOnly(code string) error {
 
 	return nil
 }
+
+func validateChecksumDigit(baseDigits, weights []int, expectedDigit int) error {
+	weightedSum := calculateWeightedSum(baseDigits, weights)
+	actualDigit := calculateChecksumDigit(weightedSum)
+
+	if actualDigit != expectedDigit {
+		return fmt.Errorf("")
+	}
+
+	return nil
+}
