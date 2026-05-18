@@ -16,3 +16,14 @@ func (t Type) isValid() bool {
 		return false
 	}
 }
+
+func (t Type) codeLength() int {
+	switch t {
+	case TypeIP, TypePhysical:
+		return 12
+	case TypeOrganization:
+		return 10
+	default:
+		return 0
+	}
+}
