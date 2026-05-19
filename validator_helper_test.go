@@ -1,6 +1,9 @@
 package inn
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func Test_validateDigitsOnly(t *testing.T) {
 	type args struct {
@@ -182,6 +185,50 @@ func Test_validateChecksumDigit(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := validateChecksumDigit(tt.args.baseDigits, tt.args.weights, tt.args.expectedDigit); (err != nil) != tt.wantErr {
 				t.Errorf("validateChecksumDigit() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_validateForbiddenValue(t *testing.T) {
+	type args struct {
+		inn       string
+		forbidden string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "запрещенное значение",
+			args: args{
+				inn:       strings.Repeat("0", 10),
+				forbidden: strings.Repeat("0", 10),
+			},
+			wantErr: true,
+		},
+		{
+			name: "разная длина ИНН и запрещенного значения",
+			args: args{
+				inn:       strings.Repeat("0", 9),
+				forbidden: strings.Repeat("0", 10),
+			},
+			wantErr: false,
+		},
+		{
+			name: "незапрещенное значение",
+			args: args{
+				inn:       strings.Repeat("1", 10),
+				forbidden: strings.Repeat("0", 10),
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateForbiddenValue(tt.args.inn, tt.args.forbidden); (err != nil) != tt.wantErr {
+				t.Errorf("validateForbiddenValue() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
