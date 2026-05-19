@@ -38,7 +38,7 @@ func Test_validateLegalEntityINN(t *testing.T) {
 	}
 }
 
-func TestValidateNaturalPersonINN(t *testing.T) {
+func TestValidateNaturalPerson(t *testing.T) {
 	type args struct {
 		inn string
 	}
@@ -71,21 +71,21 @@ func TestValidateNaturalPersonINN(t *testing.T) {
 		{
 			name: "длина меньше нужной",
 			args: args{
-				inn: strings.Repeat("1", naturalPersonINNDigitsCount-1),
+				inn: strings.Repeat("1", naturalPersonDigitsCount-1),
 			},
 			wantErr: true,
 		},
 		{
 			name: "длина больше нужной",
 			args: args{
-				inn: strings.Repeat("1", naturalPersonINNDigitsCount+1),
+				inn: strings.Repeat("1", naturalPersonDigitsCount+1),
 			},
 			wantErr: true,
 		},
 		{
 			name: "запрещенное значение",
 			args: args{
-				inn: strings.Repeat("0", naturalPersonINNDigitsCount),
+				inn: strings.Repeat("0", naturalPersonDigitsCount),
 			},
 			wantErr: true,
 		},
@@ -113,8 +113,8 @@ func TestValidateNaturalPersonINN(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateNaturalPersonINN(tt.args.inn); (err != nil) != tt.wantErr {
-				t.Errorf("ValidateNaturalPersonINN() error = %v, wantErr %v", err, tt.wantErr)
+			if err := ValidateNaturalPerson(tt.args.inn); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateNaturalPerson() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

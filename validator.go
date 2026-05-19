@@ -4,41 +4,41 @@ import (
 	"fmt"
 )
 
-func ValidateNaturalPersonINN(inn string) error {
+func ValidateNaturalPerson(inn string) error {
 	inn = Normalize(inn)
 
 	if err := validateDigitsOnly(inn); err != nil {
 		return err
 	}
 
-	if err := validateCodeLength(inn, naturalPersonINNDigitsCount); err != nil {
+	if err := validateLength(inn, naturalPersonDigitsCount); err != nil {
 		return err
 	}
 
-	if err := validateForbiddenValue(inn, naturalPersonForbiddenINN); err != nil {
+	if err := validateNotForbidden(inn, naturalPersonForbiddenValue); err != nil {
 		return err
 	}
 
 	digits := parseDigits(inn)
 
-	firstPartDigits := digits[:10]
-	expectedFirstPartDigit := digits[10]
+	firstBase := digits[:10]
+	expectedFirstDigit := digits[10]
 
 	if err := validateChecksumDigit(
-		firstPartDigits,
-		naturalPersonFirstChecksumWeights,
-		expectedFirstPartDigit,
+		firstBase,
+		naturalPersonFirstWeights,
+		expectedFirstDigit,
 	); err != nil {
 		return fmt.Errorf("")
 	}
 
-	secondPartDigits := digits[:11]
-	expectedSecondPartDigit := digits[11]
+	secondDigits := digits[:11]
+	expectedSecondDigit := digits[11]
 
 	if err := validateChecksumDigit(
-		secondPartDigits,
-		naturalPersonSecondChecksumWeights,
-		expectedSecondPartDigit,
+		secondDigits,
+		naturalPersonSecondWeights,
+		expectedSecondDigit,
 	); err != nil {
 		return fmt.Errorf("")
 	}
@@ -54,7 +54,7 @@ func validateLegalEntityINN(inn string) error {
 
 	if err := validateChecksumDigit(
 		partDigits,
-		legalEntityChecksumWeights,
+		legalEntityWeights,
 		expectedPartDigit,
 	); err != nil {
 		return fmt.Errorf("")
