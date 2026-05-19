@@ -2,7 +2,7 @@ package inn
 
 func calculateWeightedSum(digits, weights []int) int {
 	if len(digits) != len(weights) {
-		panic("")
+		panic("количество цифр и весовых коэффициентов не совпадает")
 	}
 
 	sum := 0

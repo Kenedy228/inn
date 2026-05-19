@@ -1,8 +1,6 @@
 package inn
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func ValidateNaturalPerson(inn string) error {
 	inn = Normalize(inn)
@@ -29,7 +27,7 @@ func ValidateNaturalPerson(inn string) error {
 		naturalPersonFirstWeights,
 		expectedFirstDigit,
 	); err != nil {
-		return fmt.Errorf("")
+		return fmt.Errorf("некорректная первая контрольная цифра: %w", err)
 	}
 
 	secondDigits := digits[:11]
@@ -40,7 +38,7 @@ func ValidateNaturalPerson(inn string) error {
 		naturalPersonSecondWeights,
 		expectedSecondDigit,
 	); err != nil {
-		return fmt.Errorf("")
+		return fmt.Errorf("некорректная вторая контрольная цифра: %w", err)
 	}
 
 	return nil
@@ -71,7 +69,7 @@ func ValidateIndividualEntrepreneur(inn string) error {
 		individualEntrepreneurFirstWeights,
 		expectedFirstDigit,
 	); err != nil {
-		return fmt.Errorf("")
+		return fmt.Errorf("некорректная первая контрольная цифра: %w", err)
 	}
 
 	secondDigits := digits[:11]
@@ -82,7 +80,7 @@ func ValidateIndividualEntrepreneur(inn string) error {
 		individualEntrepreneurSecondWeights,
 		expectedSecondDigit,
 	); err != nil {
-		return fmt.Errorf("")
+		return fmt.Errorf("некорректная вторая контрольная цифра: %w", err)
 	}
 
 	return nil
@@ -113,7 +111,7 @@ func ValidateLegalEntity(inn string) error {
 		legalEntityWeights,
 		expectedDigit,
 	); err != nil {
-		return fmt.Errorf("")
+		return fmt.Errorf("некорректная контрольная цифра: %w", err)
 	}
 
 	return nil
