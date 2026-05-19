@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_validateLegalEntityINN(t *testing.T) {
+func Test_ValidateLegalEntity(t *testing.T) {
 	type args struct {
 		inn string
 	}
@@ -14,6 +14,48 @@ func Test_validateLegalEntityINN(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
+		{
+			name: "пустая строка",
+			args: args{
+				inn: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "только пробелы",
+			args: args{
+				inn: strings.Repeat(" ", 10),
+			},
+			wantErr: true,
+		},
+		{
+			name: "содержит нецифры",
+			args: args{
+				inn: "123adsb-cds",
+			},
+			wantErr: true,
+		},
+		{
+			name: "длина меньше нужной",
+			args: args{
+				inn: strings.Repeat("1", legalEntityDigitsCount-1),
+			},
+			wantErr: true,
+		},
+		{
+			name: "длина больше нужной",
+			args: args{
+				inn: strings.Repeat("1", legalEntityDigitsCount+1),
+			},
+			wantErr: true,
+		},
+		{
+			name: "запрещенное значение",
+			args: args{
+				inn: strings.Repeat("0", legalEntityDigitsCount),
+			},
+			wantErr: true,
+		},
 		{
 			name: "валидный ИНН",
 			args: args{
@@ -31,8 +73,8 @@ func Test_validateLegalEntityINN(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := validateLegalEntityINN(tt.args.inn); (err != nil) != tt.wantErr {
-				t.Errorf("validateLegalEntityINN() error = %v, wantErr %v", err, tt.wantErr)
+			if err := ValidateLegalEntity(tt.args.inn); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateLegalEntity() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
