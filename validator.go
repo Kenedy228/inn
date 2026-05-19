@@ -46,6 +46,48 @@ func ValidateNaturalPerson(inn string) error {
 	return nil
 }
 
+func ValidateIndividualEntrepreneur(inn string) error {
+	inn = Normalize(inn)
+
+	if err := validateDigitsOnly(inn); err != nil {
+		return err
+	}
+
+	if err := validateLength(inn, individualEntrepreneurDigitsCount); err != nil {
+		return err
+	}
+
+	if err := validateNotForbidden(inn, individualEntrepreneurForbiddenValue); err != nil {
+		return err
+	}
+
+	digits := parseDigits(inn)
+
+	firstBase := digits[:10]
+	expectedFirstDigit := digits[10]
+
+	if err := validateChecksumDigit(
+		firstBase,
+		individualEntrepreneurFirstWeights,
+		expectedFirstDigit,
+	); err != nil {
+		return fmt.Errorf("")
+	}
+
+	secondDigits := digits[:11]
+	expectedSecondDigit := digits[11]
+
+	if err := validateChecksumDigit(
+		secondDigits,
+		individualEntrepreneurSecondWeights,
+		expectedSecondDigit,
+	); err != nil {
+		return fmt.Errorf("")
+	}
+
+	return nil
+}
+
 func validateLegalEntityINN(inn string) error {
 	digits := parseDigits(inn)
 
