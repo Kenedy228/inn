@@ -1,46 +1,9 @@
 package inn
 
-import "testing"
-
-func Test_validatePersonINN(t *testing.T) {
-	type args struct {
-		inn string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		{
-			name: "валидный ИНН для ИП",
-			args: args{
-				inn: "500100732259",
-			},
-			wantErr: false,
-		},
-		{
-			name: "неверная вторая контрольная цифра",
-			args: args{
-				inn: "500100732249", // правильная 5, заменили на 4
-			},
-			wantErr: true,
-		},
-		{
-			name: "неверная вторая контрольная цифра",
-			args: args{
-				inn: "500100732258", // правильная 9, заменили на 8
-			},
-			wantErr: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := validatePersonINN(tt.args.inn); (err != nil) != tt.wantErr {
-				t.Errorf("validatePersonINN() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
+import (
+	"strings"
+	"testing"
+)
 
 func Test_validateLegalEntityINN(t *testing.T) {
 	type args struct {
@@ -70,6 +33,88 @@ func Test_validateLegalEntityINN(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := validateLegalEntityINN(tt.args.inn); (err != nil) != tt.wantErr {
 				t.Errorf("validateLegalEntityINN() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateNaturalPersonINN(t *testing.T) {
+	type args struct {
+		inn string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "пустая строка",
+			args: args{
+				inn: "",
+			},
+			wantErr: true,
+		},
+		{
+			name: "только пробелы",
+			args: args{
+				inn: strings.Repeat(" ", 10),
+			},
+			wantErr: true,
+		},
+		{
+			name: "содержит нецифры",
+			args: args{
+				inn: "123adsb-cds",
+			},
+			wantErr: true,
+		},
+		{
+			name: "длина меньше нужной",
+			args: args{
+				inn: strings.Repeat("1", naturalPersonINNDigitsCount-1),
+			},
+			wantErr: true,
+		},
+		{
+			name: "длина больше нужной",
+			args: args{
+				inn: strings.Repeat("1", naturalPersonINNDigitsCount+1),
+			},
+			wantErr: true,
+		},
+		{
+			name: "запрещенное значение",
+			args: args{
+				inn: strings.Repeat("0", naturalPersonINNDigitsCount),
+			},
+			wantErr: true,
+		},
+		{
+			name: "валидный ИНН для ИП",
+			args: args{
+				inn: "500100732259",
+			},
+			wantErr: false,
+		},
+		{
+			name: "неверная вторая контрольная цифра",
+			args: args{
+				inn: "500100732249", // правильная 5, заменили на 4
+			},
+			wantErr: true,
+		},
+		{
+			name: "неверная вторая контрольная цифра",
+			args: args{
+				inn: "500100732258", // правильная 9, заменили на 8
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := ValidateNaturalPersonINN(tt.args.inn); (err != nil) != tt.wantErr {
+				t.Errorf("ValidateNaturalPersonINN() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
