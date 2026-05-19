@@ -33,6 +33,14 @@ func validateDigitsOnly(code string) error {
 	return nil
 }
 
+func validateForbiddenValue(inn, forbidden string) error {
+	if inn == forbidden {
+		return fmt.Errorf("")
+	}
+
+	return nil
+}
+
 func validateChecksumDigit(baseDigits, weights []int, expectedDigit int) error {
 	weightedSum := calculateWeightedSum(baseDigits, weights)
 	actualDigit := calculateChecksumDigit(weightedSum)
