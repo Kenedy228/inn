@@ -4,6 +4,24 @@ import (
 	"fmt"
 )
 
+func Validate(inn string) error {
+	inn = Normalize(inn)
+
+	if err := validateDigitsOnly(inn); err != nil {
+		return err
+	}
+
+	if err := validateCodeLength(inn, personINNDigitsCount); err == nil {
+		return validatePersonINN(inn)
+	}
+
+	if err := validateCodeLength(inn, legalEntityINNDigitsCount); err == nil {
+		return validateLegalEntityINN(inn)
+	}
+
+	return fmt.Errorf("")
+}
+
 func validatePersonINN(inn string) error {
 	digits := parseDigits(inn)
 
