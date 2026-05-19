@@ -5,8 +5,8 @@ import (
 	"unicode/utf8"
 )
 
-func validateCodeLength(code string, expectedLength int) error {
-	rc := utf8.RuneCountInString(code)
+func validateLength(inn string, expectedLength int) error {
+	rc := utf8.RuneCountInString(inn)
 
 	if rc != expectedLength {
 		return fmt.Errorf("")
@@ -15,8 +15,8 @@ func validateCodeLength(code string, expectedLength int) error {
 	return nil
 }
 
-func validateDigitsOnly(code string) error {
-	runes := []rune(code)
+func validateDigitsOnly(inn string) error {
+	runes := []rune(inn)
 
 	if len(runes) == 0 {
 		return fmt.Errorf("")
@@ -33,7 +33,7 @@ func validateDigitsOnly(code string) error {
 	return nil
 }
 
-func validateForbiddenValue(inn, forbidden string) error {
+func validateNotForbidden(inn, forbidden string) error {
 	if inn == forbidden {
 		return fmt.Errorf("")
 	}

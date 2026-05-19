@@ -7,7 +7,7 @@ import (
 
 func Test_validateDigitsOnly(t *testing.T) {
 	type args struct {
-		code string
+		inn string
 	}
 	tests := []struct {
 		name    string
@@ -17,44 +17,44 @@ func Test_validateDigitsOnly(t *testing.T) {
 		{
 			name: "только цифры",
 			args: args{
-				code: "123456",
+				inn: "123456",
 			},
 			wantErr: false,
 		},
 		{
 			name: "цифры + пробелы",
 			args: args{
-				code: "123 345",
+				inn: "123 345",
 			},
 			wantErr: true,
 		},
 		{
 			name: "цифры + буквы",
 			args: args{
-				code: "123dsa",
+				inn: "123dsa",
 			},
 			wantErr: true,
 		},
 		{
 			name: "пустое значение",
 			args: args{
-				code: "",
+				inn: "",
 			},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := validateDigitsOnly(tt.args.code); (err != nil) != tt.wantErr {
+			if err := validateDigitsOnly(tt.args.inn); (err != nil) != tt.wantErr {
 				t.Errorf("validateDigitsOnly() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func Test_validateCodeLength(t *testing.T) {
+func Test_validateLength(t *testing.T) {
 	type args struct {
-		code           string
+		inn            string
 		expectedLength int
 	}
 	tests := []struct {
@@ -65,7 +65,7 @@ func Test_validateCodeLength(t *testing.T) {
 		{
 			name: "разная длина",
 			args: args{
-				code:           "абвгд",
+				inn:            "абвгд",
 				expectedLength: 3,
 			},
 			wantErr: true,
@@ -73,7 +73,7 @@ func Test_validateCodeLength(t *testing.T) {
 		{
 			name: "одинаковая длина",
 			args: args{
-				code:           "абвгд",
+				inn:            "абвгд",
 				expectedLength: 5,
 			},
 			wantErr: false,
@@ -81,8 +81,8 @@ func Test_validateCodeLength(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := validateCodeLength(tt.args.code, tt.args.expectedLength); (err != nil) != tt.wantErr {
-				t.Errorf("validateCodeLength() error = %v, wantErr %v", err, tt.wantErr)
+			if err := validateLength(tt.args.inn, tt.args.expectedLength); (err != nil) != tt.wantErr {
+				t.Errorf("validateLength() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -190,7 +190,7 @@ func Test_validateChecksumDigit(t *testing.T) {
 	}
 }
 
-func Test_validateForbiddenValue(t *testing.T) {
+func Test_validateNotForbidden(t *testing.T) {
 	type args struct {
 		inn       string
 		forbidden string
@@ -227,8 +227,8 @@ func Test_validateForbiddenValue(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := validateForbiddenValue(tt.args.inn, tt.args.forbidden); (err != nil) != tt.wantErr {
-				t.Errorf("validateForbiddenValue() error = %v, wantErr %v", err, tt.wantErr)
+			if err := validateNotForbidden(tt.args.inn, tt.args.forbidden); (err != nil) != tt.wantErr {
+				t.Errorf("validateNotForbidden() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
