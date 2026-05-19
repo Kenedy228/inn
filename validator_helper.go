@@ -5,6 +5,13 @@ import (
 	"unicode/utf8"
 )
 
+// validateLength проверяет длину ИНН.
+//
+// Функция сравнивает фактическую длину строки с ожидаемой.
+// В случае несовпадения возвращается ошибка ErrInvalidLength
+// с дополнительной информацией о длинах.
+//
+// Используется во внутренних этапах валидации ИНН.
 func validateLength(inn string, expectedLength int) error {
 	rc := utf8.RuneCountInString(inn)
 
@@ -15,6 +22,13 @@ func validateLength(inn string, expectedLength int) error {
 	return nil
 }
 
+// validateDigitsOnly проверяет, что строка ИНН состоит только из цифр.
+//
+// Если строка пуста, возвращается ошибка ErrEmpty.
+// Если обнаружен символ, отличный от цифры, возвращается ошибка
+// ErrInvalidCharacter с указанием проблемного символа.
+//
+// Используется перед разбором строки в числовое представление.
 func validateDigitsOnly(inn string) error {
 	runes := []rune(inn)
 
@@ -33,6 +47,11 @@ func validateDigitsOnly(inn string) error {
 	return nil
 }
 
+// validateNotForbidden проверяет, что ИНН не равен запрещённому значению.
+//
+// Обычно запрещённые значения представляют собой строки,
+// состоящие только из нулей. В случае совпадения возвращается
+// ошибка ErrForbiddenValue.
 func validateNotForbidden(inn, forbidden string) error {
 	if inn == forbidden {
 		return fmt.Errorf("%w", ErrForbiddenValue)
@@ -41,6 +60,13 @@ func validateNotForbidden(inn, forbidden string) error {
 	return nil
 }
 
+// validateChecksumDigit проверяет корректность контрольной цифры ИНН.
+//
+// Функция вычисляет контрольную цифру на основе базовых цифр и
+// весовых коэффициентов, затем сравнивает её с ожидаемым значением.
+//
+// В случае несовпадения возвращается ошибка ErrInvalidChecksum
+// с указанием ожидаемой и фактической контрольной цифры.
 func validateChecksumDigit(baseDigits, weights []int, expectedDigit int) error {
 	weightedSum := calculateWeightedSum(baseDigits, weights)
 	actualDigit := calculateChecksumDigit(weightedSum)
