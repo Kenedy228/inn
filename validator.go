@@ -88,16 +88,30 @@ func ValidateIndividualEntrepreneur(inn string) error {
 	return nil
 }
 
-func validateLegalEntityINN(inn string) error {
+func ValidateLegalEntity(inn string) error {
+	inn = Normalize(inn)
+
+	if err := validateDigitsOnly(inn); err != nil {
+		return err
+	}
+
+	if err := validateLength(inn, legalEntityDigitsCount); err != nil {
+		return err
+	}
+
+	if err := validateNotForbidden(inn, legalEntityForbiddenValue); err != nil {
+		return err
+	}
+
 	digits := parseDigits(inn)
 
-	partDigits := digits[:9]
-	expectedPartDigit := digits[9]
+	base := digits[:9]
+	expectedDigit := digits[9]
 
 	if err := validateChecksumDigit(
-		partDigits,
+		base,
 		legalEntityWeights,
-		expectedPartDigit,
+		expectedDigit,
 	); err != nil {
 		return fmt.Errorf("")
 	}
