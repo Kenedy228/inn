@@ -4,25 +4,21 @@ import (
 	"fmt"
 )
 
-func Validate(inn string) error {
+func ValidateNaturalPersonINN(inn string) error {
 	inn = Normalize(inn)
 
 	if err := validateDigitsOnly(inn); err != nil {
 		return err
 	}
 
-	if err := validateCodeLength(inn, personINNDigitsCount); err == nil {
-		return validatePersonINN(inn)
+	if err := validateCodeLength(inn, naturalPersonINNDigitsCount); err != nil {
+		return err
 	}
 
-	if err := validateCodeLength(inn, legalEntityINNDigitsCount); err == nil {
-		return validateLegalEntityINN(inn)
+	if err := validateForbiddenValue(inn, naturalPersonForbiddenINN); err != nil {
+		return err
 	}
 
-	return fmt.Errorf("")
-}
-
-func validatePersonINN(inn string) error {
 	digits := parseDigits(inn)
 
 	firstPartDigits := digits[:10]
@@ -30,7 +26,7 @@ func validatePersonINN(inn string) error {
 
 	if err := validateChecksumDigit(
 		firstPartDigits,
-		personFirstChecksumWeights,
+		naturalPersonFirstChecksumWeights,
 		expectedFirstPartDigit,
 	); err != nil {
 		return fmt.Errorf("")
@@ -41,7 +37,7 @@ func validatePersonINN(inn string) error {
 
 	if err := validateChecksumDigit(
 		secondPartDigits,
-		personSecondChecksumWeights,
+		naturalPersonSecondChecksumWeights,
 		expectedSecondPartDigit,
 	); err != nil {
 		return fmt.Errorf("")
